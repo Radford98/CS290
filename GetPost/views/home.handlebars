@@ -1,1 +1,7 @@
-<h1>The Home Page</h1>
+<h1>{{type}} Request Received</h1>
+
+<ul>
+    {{#each dataList}}
+    <li>{{this.name}}: {{this.value}}</li>
+    {{/each}}
+</ul>
