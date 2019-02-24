@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\views"
+    "\\views",
+    "\\views\\layouts"
   ],
-  "SelectedNode": "\\myForms.js",
+  "SelectedNode": "\\views\\layouts\\main.handlebars",
   "PreviewInSolutionExplorer": false
 }

@@ -13,7 +13,7 @@ app.set('port', 2568);
 
 app.get('/', function (req, res) {
     var qParams = [];
-    for (var p in req.query) {
+    for (var p in req.query) {  // Pull the data from the URL query
         qParams.push({ 'name': p, 'value': req.query[p] });
     }
     var context = {};
@@ -26,17 +26,21 @@ app.get('/', function (req, res) {
 
 app.post('/', function (req, res) {
     var qParams = [];
-    for (var p in req.body) {
+    for (var p in req.body) {   // Pull the data from the body submission
         qParams.push({ 'name': p, 'value': req.body[p] });
     }
-    console.log(qParams);
-    console.log(req.body);
     var context = {};
     context.dataList = qParams;
     context.type = "POST";
     res.render('home', context);
 });
 
+/* I needed to see for myself that redirecting to the above page(s) from another
+page would display the correct information, so I made another page to test going
+to the homepage. Uses the same form in the home page.   */
+app.get('/otherpage', function (req, res) {
+    res.render('otherpage');
+})
 
 app.use(function (req, res) {
     res.status(404);

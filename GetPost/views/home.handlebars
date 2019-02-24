@@ -1,3 +1,4 @@
+<!--Page to receive get and post requests and display the data sent.-->
 <h1>{{type}} Request Received</h1>
 
 <ul>
@@ -6,6 +7,7 @@
     {{/each}}
 </ul>
 
+<!--Form for testing out the above section.-->
 <form id="myForm" method="get" onsubmit="getOrPost();">
     <fieldset>
         <legend>Submit Stuff</legend>
@@ -38,6 +40,7 @@
         console.log("DOM loaded");
     })
 
+    // Function to change submission type to post
     function getOrPost() {
         console.log("form submitted");
         if (document.getElementById("post").checked == true) {
