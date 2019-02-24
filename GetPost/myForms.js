@@ -11,7 +11,6 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', 2568);
 
-
 app.get('/', function (req, res) {
     var qParams = [];
     for (var p in req.query) {
@@ -22,6 +21,7 @@ app.get('/', function (req, res) {
     context.type = "GET";
     
     res.render('home', context);
+    
 });
 
 app.post('/', function (req, res) {
