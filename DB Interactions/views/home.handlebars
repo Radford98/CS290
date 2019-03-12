@@ -1,0 +1,50 @@
+<h1>Are you ready to get RIPPED?</h1>
+
+<!--Form for adding new workouts-->
+<form id="workout">
+    <fieldset>
+        <legend>Add a workout</legend>
+        <label for="name">Name of exercise:</label>
+        <input type="text" name="name" id="name" required />
+        <br />
+        
+        <label for="reps">Reps:</label>
+        <input type="number" name="reps" id="reps" />
+        <br />
+        
+        <label for="weight">Weight:</label>
+        <input type="number" name="weight" id="weight" />
+        <br />
+
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date" />
+        <br />
+
+        <label for="unit">Unit:</label>
+        <select id="unit" name="unit">
+            <option value="1">lbs</option>
+            <option value="0">kg</option>
+        </select>
+        <br />
+
+        <button id="addWorkout">Add Workout</button>
+    </fieldset>
+</form>
+
+<table id="wTable">
+    <thead>
+        <tr>
+            <th hidden>id</th>
+            <th>Name</th>
+            <th>Reps</th>
+            <th>Weight</th>
+            <th>Date</th>
+            <th>Unit</th>
+        </tr>
+    </thead>
+    <tbody id="wBody">
+
+    </tbody>
+</table>
+
+<p>{{results}}</p>
