@@ -1,0 +1,34 @@
+<h1>Update {{name}}</h1>
+
+<div>
+    <form id="wUpdate">
+        <fieldset>
+            <legend>Enter information for {{name}}</legend>
+
+            <label for="uName">Name:</label>
+            <input type="text" name="uName" id="uName" value="{{name}}" required />
+            <br />
+
+            <label for="uReps">Reps:</label>
+            <input type="number" name="uReps" id="uReps" value="{{reps}}" />
+            <br />
+
+            <label for="uWeight">Weight:</label>
+            <input type="number" name="uWeight" id="uWeight" value="{{weight}}" />
+            <br />
+
+            <label for="uDate">Date:</label>
+            <input type="date" name="uDate" id="uDate" value="{{date}}" />
+            <br />
+
+            <label for"uUnit">Unit:</label>
+            <select id="uUnit" name="uUnit">
+                <option value="1">lbs</option>
+                <option value="2">kg</option>
+            </select>
+            <br />
+            <button onclick="updateRow({{id}})">Update</button>
+
+        </fieldset>
+    </form>
+</div>

@@ -31,14 +31,17 @@ function handleErr(error) {
     res.end();
 }
 
+// Display homepage
 app.get('/', function (req, res) {
     context = {};
 
     res.render('home', context);
 });
 
+// Insert data to DB
 app.post('/', function (req, res) {
     var sql = 'INSERT INTO workouts (name, reps, weight, date, lbs) VALUES (?,?,?,?,?)';
+    req.body.date = req.body.date.substring(5, 7) + '-' + req.body.date.substring(8) + '-' + req.body.date.substring(0, 4);
     var inserts = [req.body.name, req.body.reps || null, req.body.weight || null, req.body.date || null, req.body.unit];
 
     pool.query(sql, inserts, function (error) {
@@ -47,13 +50,28 @@ app.post('/', function (req, res) {
         } else {
             res.status(200);
             res.end();
-            /*
-            
-            */
         }
     });
 });
 
+// Display update page
+app.get('/:id', function (req, res) {
+    var context = {};
+    var sql = 'SELECT * FROM workouts WHERE id = ?';
+    pool.query(sql, [req.params.id], function (error, results) {
+        if (error) {
+            handleErr(error);
+        } else {
+            context = results[0];
+            console.log(context.date);
+            context.date = context.date.substring(6) + '-' + context.date.substring(0, 2) + '-' + context.date.substring(3, 5);
+            console.log(context.date);
+            res.render('update', context);
+        }
+    })
+})
+
+// Get the data for the table
 app.get('/get-table', function (req, res) {
     var sql = 'SELECT * FROM workouts';
     pool.query(sql, function (error, results) {
@@ -67,6 +85,7 @@ app.get('/get-table', function (req, res) {
     });
 })
 
+// Reset the table to empty
 app.get('/reset-table',function(req,res,next){
     var context = {};
     pool.query("DROP TABLE IF EXISTS workouts", function(err){
@@ -83,6 +102,40 @@ app.get('/reset-table',function(req,res,next){
         });
     });
 });
+
+app.put('/:id', function (req, res) {
+    var sql = 'SELECT name, reps, weight, date, lbs FROM workouts WHERE id = ?';
+    pool.query(sql, [res.params.id], function (error, results) {
+        if (error) {
+            handleErr(error);
+        } else {
+            var current = results[0];
+            sql = 'UPDATE workouts SET name = ?, reps = ?, weight = ?, date = ?, lbs = ? WHERE id = ?';
+            req.body.uDate = req.body.uDate.substring(5, 7) + '-' + req.body.uDate.substring(8) + '-' + req.body.uDate.substring(0, 4);
+            var inserts = [req.body.uName || current.name, req.body.uReps || current.reps, req.body.uWeight || current.weight, req.body.uDate || current.date, req.body.uUnit || current.lbs, req.params.id];
+            pool.query(sql, inserts, function (error, results) {
+                if (error) {
+                    handleErr(error);
+                } else {
+                    res.status(200);
+                    res.end();
+                }
+            })
+        }
+    })
+})
+
+app.delete('/:id', function (req, res) {
+    var sql = 'DELETE FROM workouts WHERE id = ?';
+    pool.query(sql, [req.params.id], function (error, results) {
+        if (error) {
+            handleErr(error);
+        } else {
+            res.status(202).end();
+        }
+    });
+});
+
 
 app.use(function (req, res) {
     res.status(404);
