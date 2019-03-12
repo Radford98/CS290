@@ -1,11 +1,13 @@
 
 
 $(document).ready(function () {
+    // Add button's function to add an entry
     $('#addWorkout').click(function (event) {
         event.preventDefault();
         addRow();
     });
 
+    // Get the table from the DB
     getTable();
 });
 
@@ -13,7 +15,7 @@ $(document).ready(function () {
 /* Submits a post request to add a row to the DB then calls the function to
 receive and print the table */
 function addRow() {
-    console.log("addRow called");
+    $('#results').hide();   // After an element is added, the message "Table reset" goes away
     $.ajax({
         url: '/',
         type: 'POST',
@@ -31,21 +33,21 @@ function getTable() {
         url: '/get-table',
         type: 'GET',
         success: function (result) {
-            $('wBody').empty();     // Remove the current table
+            $('#wBody').empty();     // Remove the current table
 
             // Process each element of the array, adding a row to the table
             result.forEach(element => {
-                if (element.unit == '1') { element.unit = 'lbs'; }  // Convert bool to readable values
-                else { element.unit = 'kg'; }
+                if (element.lbs == 1) { element.lbs = 'lbs'; }  // Convert bool to readable values
+                else { element.lbs = 'kg'; }
 
-                $('#wBody')
-                    .append('<tr>')
-                    .append('<td hidden>' + '</td>')
+                $('#wBody').append('<tr>');
+                $('#wBody tr:last-child')
+                    .append('<td hidden>' + element.id + '</td>')
                     .append('<td>' + element.name + '</td>')
                     .append('<td>' + element.reps + '</td>')
                     .append('<td>' + element.weight + '</td>')
                     .append('<td>' + element.date + '</td>')
-                    .append('<td>' + element.unit + '</td>');
+                    .append('<td>' + element.lbs + '</td>');
             });
         }
     });
