@@ -23,7 +23,7 @@ app.use(express.static('static'));
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 2581);
+app.set('port', 2582);
 
 function handleErr(error) {
     console.log(JSON.stringify(error));
@@ -54,23 +54,6 @@ app.post('/', function (req, res) {
     });
 });
 
-// Display update page
-app.get('/:id', function (req, res) {
-    var context = {};
-    var sql = 'SELECT * FROM workouts WHERE id = ?';
-    pool.query(sql, [req.params.id], function (error, results) {
-        if (error) {
-            handleErr(error);
-        } else {
-            context = results[0];
-            console.log(context.date);
-            context.date = context.date.substring(6) + '-' + context.date.substring(0, 2) + '-' + context.date.substring(3, 5);
-            console.log(context.date);
-            res.render('update', context);
-        }
-    })
-})
-
 // Get the data for the table
 app.get('/get-table', function (req, res) {
     var sql = 'SELECT * FROM workouts';
@@ -83,7 +66,7 @@ app.get('/get-table', function (req, res) {
             res.send(results);
         }
     });
-})
+});
 
 // Reset the table to empty
 app.get('/reset-table',function(req,res,next){
@@ -101,6 +84,23 @@ app.get('/reset-table',function(req,res,next){
             res.render('home', context);
         });
     });
+});
+
+// Display update page
+app.get('/:id', function (req, res) {
+    var context = {};
+    var sql = 'SELECT * FROM workouts WHERE id = ?';
+    pool.query(sql, [req.params.id], function (error, results) {
+        if (error) {
+            handleErr(error);
+        } else {
+            context = results[0];
+            console.log(context.date);
+            context.date = context.date.substring(6) + '-' + context.date.substring(0, 2) + '-' + context.date.substring(3, 5);
+            console.log(context.date);
+            res.render('update', context);
+        }
+    })
 });
 
 app.put('/:id', function (req, res) {
