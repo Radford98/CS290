@@ -25,10 +25,20 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.set('port', 2582);
 
+// Handle error from mysql queries
 function handleErr(error) {
     console.log(JSON.stringify(error));
     res.write(JSON.stringify(error));
     res.end();
+}
+
+// Convert date string in the form YYYY-MM-DD to MM-DD-YYYY
+function convertMDY(date) {
+    if (date != '') {
+        date = date.substring(5, 7) + '-' + date.substring(8) + '-' + date.substring(0, 4);
+    } else {
+        date = null;
+    }
 }
 
 // Display homepage
@@ -41,7 +51,7 @@ app.get('/', function (req, res) {
 // Insert data to DB
 app.post('/', function (req, res) {
     var sql = 'INSERT INTO workouts (name, reps, weight, date, lbs) VALUES (?,?,?,?,?)';
-    req.body.date = req.body.date.substring(5, 7) + '-' + req.body.date.substring(8) + '-' + req.body.date.substring(0, 4);
+    convertMDY(req.body.date);
     var inserts = [req.body.name, req.body.reps || null, req.body.weight || null, req.body.date || null, req.body.unit];
 
     pool.query(sql, inserts, function (error) {
@@ -61,7 +71,10 @@ app.get('/get-table', function (req, res) {
         if (error) {
             handleErr(error);
         } else {
+            console.log('------');
+            console.log('get-table results:');
             console.log(results);
+            console.log('------');
             res.type('application/json');
             res.send(results);
         }
@@ -105,13 +118,13 @@ app.get('/:id', function (req, res) {
 
 app.put('/:id', function (req, res) {
     var sql = 'SELECT name, reps, weight, date, lbs FROM workouts WHERE id = ?';
-    pool.query(sql, [res.params.id], function (error, results) {
+    pool.query(sql, [req.params.id], function (error, results) {
         if (error) {
             handleErr(error);
         } else {
             var current = results[0];
             sql = 'UPDATE workouts SET name = ?, reps = ?, weight = ?, date = ?, lbs = ? WHERE id = ?';
-            req.body.uDate = req.body.uDate.substring(5, 7) + '-' + req.body.uDate.substring(8) + '-' + req.body.uDate.substring(0, 4);
+            convertMDY(req.body.uDate);
             var inserts = [req.body.uName || current.name, req.body.uReps || current.reps, req.body.uWeight || current.weight, req.body.uDate || current.date, req.body.uUnit || current.lbs, req.params.id];
             pool.query(sql, inserts, function (error, results) {
                 if (error) {
