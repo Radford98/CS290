@@ -35,9 +35,9 @@ function handleErr(error) {
 // Convert date string in the form YYYY-MM-DD to MM-DD-YYYY
 function convertMDY(date) {
     if (date != '') {
-        date = date.substring(5, 7) + '-' + date.substring(8) + '-' + date.substring(0, 4);
+        return date.substring(5, 7) + '-' + date.substring(8) + '-' + date.substring(0, 4);
     } else {
-        date = null;
+        return null;
     }
 }
 
@@ -51,7 +51,7 @@ app.get('/', function (req, res) {
 // Insert data to DB
 app.post('/', function (req, res) {
     var sql = 'INSERT INTO workouts (name, reps, weight, date, lbs) VALUES (?,?,?,?,?)';
-    convertMDY(req.body.date);
+    req.body.date = convertMDY(req.body.date);
     var inserts = [req.body.name, req.body.reps || null, req.body.weight || null, req.body.date || null, req.body.unit];
 
     pool.query(sql, inserts, function (error) {
@@ -108,9 +108,9 @@ app.get('/:id', function (req, res) {
             handleErr(error);
         } else {
             context = results[0];
-            console.log(context.date);
-            context.date = context.date.substring(6) + '-' + context.date.substring(0, 2) + '-' + context.date.substring(3, 5);
-            console.log(context.date);
+            if (context.date != null) {
+                context.date = context.date.substring(6) + '-' + context.date.substring(0, 2) + '-' + context.date.substring(3, 5);
+            }
             res.render('update', context);
         }
     })
@@ -124,7 +124,7 @@ app.put('/:id', function (req, res) {
         } else {
             var current = results[0];
             sql = 'UPDATE workouts SET name = ?, reps = ?, weight = ?, date = ?, lbs = ? WHERE id = ?';
-            convertMDY(req.body.uDate);
+            req.body.uDate = convertMDY(req.body.uDate);
             var inserts = [req.body.uName || current.name, req.body.uReps || current.reps, req.body.uWeight || current.weight, req.body.uDate || current.date, req.body.uUnit || current.lbs, req.params.id];
             pool.query(sql, inserts, function (error, results) {
                 if (error) {

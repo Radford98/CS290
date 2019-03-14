@@ -15,7 +15,7 @@ $(document).ready(function () {
 /* Submits a post request to add a row to the DB then calls the function to
 receive and print the table */
 function addRow() {
-    if ($('name').val() == '') {    // Make sure there is a name value before submitting
+    if ($('#name').val() == '') {    // Make sure there is a name value before submitting
         $('#required').show();
     } else {
         $('#required').hide();
@@ -84,7 +84,7 @@ function updateRow(id) {
         type: 'PUT',
         data: $('#wUpdate').serialize(),
         success: function (result) {
-            windows.location.replace('./');
+            window.location.replace('./');
         }
     });
 }
