@@ -57,8 +57,8 @@ function getTable() {
                     .append('<td>' + element.weight + '</td>')
                     .append('<td>' + element.date + '</td>')
                     .append('<td>' + element.lbs + '</td>')
-                    .append('<button id="update' + element.id + '">Update</button>')
-                    .append('<button onclick="deleteRow(' + element.id + ')">Delete</button>');
+                    .append('<td> <button id="update' + element.id + '">Update</button> </td>')
+                    .append('<td> <button onclick="deleteRow(' + element.id + ')">Delete</button> </td>');
                 
                 $('#update' + element.id).click(event=> {
                     window.location.href = "/" + element.id;
