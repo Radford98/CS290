@@ -2,6 +2,7 @@
 Brad Powell
 CS 290 Winter 2019
 Database Interactions and UI
+Note: I am also taking CS 340 on databases this quarter, so some of the implementations (put, delete) I learned to use in that class.
 */
 
 var express = require('express');
@@ -71,10 +72,6 @@ app.get('/get-table', function (req, res) {
         if (error) {
             handleErr(error);
         } else {
-            console.log('------');
-            console.log('get-table results:');
-            console.log(results);
-            console.log('------');
             res.type('application/json');
             res.send(results);
         }
